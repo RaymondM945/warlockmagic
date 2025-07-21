@@ -1,0 +1,7 @@
+## Interface: 11507
+## Title: warlockmagic
+## Notes: warlock is the best class
+## Author: You
+## Version: 1.0
+
+warlockmagic.lua
