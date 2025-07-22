@@ -13,45 +13,35 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	box.texture:SetColorTexture(0, 0, 0, 1)
 
 	if IsInGroup() then
-		if UnitAffectingCombat("party1") then
+		local targethealth = UnitHealth("party1target")
+		local targetmaxHealth = UnitHealthMax("party1target")
+		local hpPercent = (targethealth / targetmaxHealth) * 100
+		if UnitAffectingCombat("party1") and hpPercent < 97 then
 			box.texture:SetColorTexture(1, 1, 0, 1)
-			local targethealth = UnitHealth("target")
-			local targetmaxHealth = UnitHealthMax("target")
-			local hpPercent = (targethealth / targetmaxHealth) * 100
-
-			local canattack = hpPercent < 95
 
 			local corruptionName = GetSpellInfo(172)
 			local immolateName = GetSpellInfo(348)
 			local curseOfReck = GetSpellInfo(704)
 			local sametarget = UnitIsUnit("target", "party1target")
 			local spell = UnitCastingInfo("player")
-			print("Casting: " .. (spell or "None"))
 
 			if not sametarget then
 				box.texture:SetColorTexture(0, 0, 1, 1)
 			elseif not isFollowing then
 				box.texture:SetColorTexture(1, 1, 1, 1)
 			elseif
-				not AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL")
-				and IsUsableSpell(corruptionName)
-				and canattack
+				not AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL") and IsUsableSpell(corruptionName)
 			then
 				box.texture:SetColorTexture(1, 0, 0, 1)
 			elseif
 				not AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL")
 				and IsUsableSpell(immolateName)
 				and (spell ~= immolateName)
-				and canattack
 			then
 				box.texture:SetColorTexture(1, 0, 1, 1)
-			elseif
-				not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL")
-				and IsUsableSpell(curseOfReck)
-				and canattack
-			then
+			elseif not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") and IsUsableSpell(curseOfReck) then
 				box.texture:SetColorTexture(0, 1, 1, 1)
-			elseif not IsAutoRepeatSpell("Shoot") and canattack then
+			elseif not IsAutoRepeatSpell("Shoot") then
 				box.texture:SetColorTexture(0, 1, 0, 1)
 			end
 		else
