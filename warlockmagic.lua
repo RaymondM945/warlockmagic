@@ -13,37 +13,46 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	box.texture:SetColorTexture(0, 0, 0, 1)
 
 	if IsInGroup() then
-		local targethealth = UnitHealth("target")
-		local targetmaxHealth = UnitHealthMax("target")
-		local hpPercent = (targethealth / targetmaxHealth) * 100
-		if UnitAffectingCombat("party1") and hpPercent < 95 then
+		if UnitAffectingCombat("party1") then
 			box.texture:SetColorTexture(1, 1, 0, 1)
+			local targethealth = UnitHealth("target")
+			local targetmaxHealth = UnitHealthMax("target")
+			local hpPercent = (targethealth / targetmaxHealth) * 100
+
+			local canattack = hpPercent < 95
+
 			local corruptionName = GetSpellInfo(172)
 			local immolateName = GetSpellInfo(348)
 			local curseOfReck = GetSpellInfo(704)
 			local sametarget = UnitIsUnit("target", "party1target")
 			local spell = UnitCastingInfo("player")
 			print("Casting: " .. (spell or "None"))
+
 			if not sametarget then
 				box.texture:SetColorTexture(0, 0, 1, 1)
 			elseif not isFollowing then
 				box.texture:SetColorTexture(1, 1, 1, 1)
 			elseif
-				not AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL") and IsUsableSpell(corruptionName)
+				not AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL")
+				and IsUsableSpell(corruptionName)
+				and canattack
 			then
 				box.texture:SetColorTexture(1, 0, 0, 1)
 			elseif
 				not AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL")
 				and IsUsableSpell(immolateName)
 				and (spell ~= immolateName)
+				and canattack
 			then
 				box.texture:SetColorTexture(1, 0, 1, 1)
-			elseif not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") and IsUsableSpell(curseOfReck) then
+			elseif
+				not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL")
+				and IsUsableSpell(curseOfReck)
+				and canattack
+			then
 				box.texture:SetColorTexture(0, 1, 1, 1)
-			elseif not IsAutoRepeatSpell("Shoot") then
+			elseif not IsAutoRepeatSpell("Shoot") and canattack then
 				box.texture:SetColorTexture(0, 1, 0, 1)
-			else
-				box.texture:SetColorTexture(0, 0, 0, 1)
 			end
 		else
 			local health = UnitHealth("player")
@@ -54,7 +63,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			local maxMana = UnitPowerMax("player", 0)
 			local mppercent = (mana / maxMana) * 100
 
-			if hpPercent > 60 and mppercent < 95 then
+			if hpPercent > 70 and mppercent < 90 then
 				box.texture:SetColorTexture(1, 0.5, 0.5, 1)
 			else
 				box.texture:SetColorTexture(0, 0, 0, 1)
