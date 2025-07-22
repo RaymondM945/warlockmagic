@@ -50,11 +50,11 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			local maxHealth = UnitHealthMax("player")
 
 			local hpPercent = (health / maxHealth) * 100
-			local mana = UnitPower("player", 0) -- 0 is the ID for MANA
+			local mana = UnitPower("player", 0)
 			local maxMana = UnitPowerMax("player", 0)
 			local mppercent = (mana / maxMana) * 100
 
-			if hpPercent > 50 and mppercent < 100 then
+			if hpPercent > 60 and mppercent < 95 then
 				box.texture:SetColorTexture(1, 0.5, 0.5, 1)
 			else
 				box.texture:SetColorTexture(0, 0, 0, 1)
