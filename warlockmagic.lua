@@ -16,7 +16,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 		local targethealth = UnitHealth("target")
 		local targetmaxHealth = UnitHealthMax("target")
 		local hpPercent = (targethealth / targetmaxHealth) * 100
-		if UnitAffectingCombat("player") and hpPercent < 95 then
+		if UnitAffectingCombat("party1") and hpPercent < 95 then
 			box.texture:SetColorTexture(1, 1, 0, 1)
 			local corruptionName = GetSpellInfo(172)
 			local immolateName = GetSpellInfo(348)
