@@ -22,7 +22,8 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			local immolateName = GetSpellInfo(348)
 			local curseOfReck = GetSpellInfo(704)
 			local sametarget = UnitIsUnit("target", "party1target")
-
+			local spell = UnitCastingInfo("player")
+			print("Casting: " .. (spell or "None"))
 			if not sametarget then
 				box.texture:SetColorTexture(0, 0, 1, 1)
 			elseif not isFollowing then
