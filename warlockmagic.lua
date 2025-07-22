@@ -32,7 +32,11 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				not AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL") and IsUsableSpell(corruptionName)
 			then
 				box.texture:SetColorTexture(1, 0, 0, 1)
-			elseif not AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL") and IsUsableSpell(immolateName) then
+			elseif
+				not AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL")
+				and IsUsableSpell(immolateName)
+				and (spell ~= immolateName)
+			then
 				box.texture:SetColorTexture(1, 0, 1, 1)
 			elseif not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") and IsUsableSpell(curseOfReck) then
 				box.texture:SetColorTexture(0, 1, 1, 1)
