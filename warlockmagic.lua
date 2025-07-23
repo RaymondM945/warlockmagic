@@ -71,6 +71,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 		if targetmaxHealth > 0 then
 			hpPercent = (targethealth / targetmaxHealth) * 100
 		end
+
 		if UnitAffectingCombat("party1") and hpPercent < 97 then
 			box.texture:SetColorTexture(1, 1, 0, 1)
 
@@ -84,7 +85,18 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			local shadowisUsable, notEnoughMana = IsUsableSpell(sname)
 			local canCastShadowBolt = shadowisUsable and not notEnoughMana and spell ~= sname
 
-			if not sametarget then
+			local healthplayer = UnitHealth("player")
+			local maxplayerHealth = UnitHealthMax("player")
+
+			local hpPercentplayer = (healthplayer / maxplayerHealth) * 100
+
+			local start, duration, enable = C_Container.GetContainerItemCooldown(0, 1)
+
+			local canusePotion = start == 0 and duration == 0 and enable == 1
+
+			if canusePotion and hpPercentplayer < 40 then
+				box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
+			elseif not sametarget then
 				box.texture:SetColorTexture(0, 0, 1, 1)
 			elseif not isFollowing and checkfollow then
 				box.texture:SetColorTexture(1, 1, 1, 1)
@@ -123,8 +135,24 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	end
 end)
 
+local function FindItemInBags(targetItemID)
+	for bag = 0, 4 do
+		for slot = 1, GetContainerNumSlots(bag) do
+			local itemID = GetContainerItemID(bag, slot)
+			if itemID == targetItemID then
+				print("Found item in bag " .. bag .. ", slot " .. slot)
+				return bag, slot
+			end
+		end
+	end
+	print("Item not found in bags.")
+	return nil
+end
+
 box:RegisterEvent("AUTOFOLLOW_BEGIN")
 box:RegisterEvent("AUTOFOLLOW_END")
+
+box:RegisterEvent("PLAYER_LOGIN")
 
 box:SetScript("OnEvent", function(self, event, ...)
 	if event == "AUTOFOLLOW_BEGIN" then
@@ -134,5 +162,7 @@ box:SetScript("OnEvent", function(self, event, ...)
 	elseif event == "AUTOFOLLOW_END" then
 		isFollowing = nil
 		print("Stopped following")
+	elseif event == "PLAYER_LOGIN" then
+		print("Player has logged in. Initializing addon...")
 	end
 end)
