@@ -13,7 +13,7 @@ MyCheckbox.text = MyCheckbox:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 MyCheckbox.text:SetPoint("LEFT", MyCheckbox, "RIGHT", 5, 0)
 MyCheckbox.text:SetText("stop addon")
 
-MyCheckbox:SetChecked(not stopaddon)
+MyCheckbox:SetChecked(stopaddon)
 
 MyCheckbox:SetScript("OnClick", function(self)
 	if self:GetChecked() then
