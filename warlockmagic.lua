@@ -51,7 +51,6 @@ MyCheckbox3:SetChecked(castshadowbolt)
 
 MyCheckbox3:SetScript("OnClick", function(self)
 	castshadowbolt = self:GetChecked()
-	print("Checkbox 3 is", isChecked and "checked" or "unchecked")
 end)
 
 local box = CreateFrame("Frame", "CombatRogueCenterBox", UIParent)
@@ -69,7 +68,9 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	if IsInGroup() and not stopaddon then
 		local targethealth = UnitHealth("party1target")
 		local targetmaxHealth = UnitHealthMax("party1target")
-		local hpPercent = (targethealth / targetmaxHealth) * 100
+		if targetmaxHealth > 0 then
+			hpPercent = (targethealth / targetmaxHealth) * 100
+		end
 		if UnitAffectingCombat("party1") and hpPercent < 97 then
 			box.texture:SetColorTexture(1, 1, 0, 1)
 
@@ -135,18 +136,3 @@ box:SetScript("OnEvent", function(self, event, ...)
 		print("Stopped following")
 	end
 end)
-
--- if AuraUtil.FindAuraByName(corruptionName, "target", "HARMFUL") then
--- 	print("Target has Corruption!")
--- end
-
--- local immolateName = GetSpellInfo(348)
-
--- if AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL") then
--- 	print("Target has Immolate!")
--- end
--- local curseOfReck = GetSpellInfo(704)
-
--- if AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") then
--- 	print("Target has Curse of Recklessness!")
--- end
