@@ -2,6 +2,7 @@ local isFollowing = nil
 local stopaddon = false
 local checkfollow = true
 local castshadowbolt = true
+local castimmolate = true
 
 local MyCheckbox = CreateFrame("CheckButton", "MyCheckboxExample", UIParent, "UICheckButtonTemplate")
 MyCheckbox:SetSize(30, 30)
@@ -45,12 +46,26 @@ MyCheckbox3:SetPoint("TOP", MyCheckbox2, "BOTTOM", 0, 0) -- Directly under Check
 
 MyCheckbox3.text = MyCheckbox3:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 MyCheckbox3.text:SetPoint("LEFT", MyCheckbox3, "RIGHT", 5, 0)
-MyCheckbox3.text:SetText("cast shadow bolt")
+MyCheckbox3.text:SetText("cast immolate")
 
 MyCheckbox3:SetChecked(castshadowbolt)
 
 MyCheckbox3:SetScript("OnClick", function(self)
 	castshadowbolt = self:GetChecked()
+end)
+
+local MyCheckbox4 = CreateFrame("CheckButton", "MyCheckbox4", UIParent, "UICheckButtonTemplate")
+MyCheckbox4:SetSize(30, 30)
+MyCheckbox4:SetPoint("TOP", MyCheckbox3, "BOTTOM", 0, 0) -- Directly under Checkbox2
+
+MyCheckbox4.text = MyCheckbox4:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+MyCheckbox4.text:SetPoint("LEFT", MyCheckbox4, "RIGHT", 5, 0)
+MyCheckbox4.text:SetText("cast shadow bolt")
+
+MyCheckbox4:SetChecked(castimmolate)
+
+MyCheckbox4:SetScript("OnClick", function(self)
+	castimmolate = self:GetChecked()
 end)
 
 local box = CreateFrame("Frame", "CombatRogueCenterBox", UIParent)
@@ -108,6 +123,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				not AuraUtil.FindAuraByName(immolateName, "target", "HARMFUL")
 				and IsUsableSpell(immolateName)
 				and (spell ~= immolateName)
+				and castimmolate
 			then
 				box.texture:SetColorTexture(1, 0, 1, 1)
 			elseif not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") and IsUsableSpell(curseOfReck) then
