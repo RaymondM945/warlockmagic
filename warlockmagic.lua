@@ -3,7 +3,7 @@ local stopaddon = false
 local checkfollow = true
 local castshadowbolt = true
 local castimmolate = true
-
+local castshadowburn = false
 local MyCheckbox = CreateFrame("CheckButton", "MyCheckboxExample", UIParent, "UICheckButtonTemplate")
 MyCheckbox:SetSize(30, 30)
 
@@ -60,12 +60,29 @@ MyCheckbox4:SetPoint("TOP", MyCheckbox3, "BOTTOM", 0, 0) -- Directly under Check
 
 MyCheckbox4.text = MyCheckbox4:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 MyCheckbox4.text:SetPoint("LEFT", MyCheckbox4, "RIGHT", 5, 0)
-MyCheckbox4.text:SetText("cast shadow bolt")
+MyCheckbox4.text:SetText("cast immolate")
 
 MyCheckbox4:SetChecked(castimmolate)
 
 MyCheckbox4:SetScript("OnClick", function(self)
 	castimmolate = self:GetChecked()
+end)
+
+local MyCheckbox5 = CreateFrame("CheckButton", "MyCheckbox5", UIParent, "UICheckButtonTemplate")
+MyCheckbox5:SetSize(30, 30)
+MyCheckbox5:SetPoint("TOP", MyCheckbox4, "BOTTOM", 0, 0)
+
+_G[MyCheckbox5:GetName() .. "Text"]:Hide() -- hide default label
+
+MyCheckbox5.text = MyCheckbox5:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+MyCheckbox5.text:SetPoint("LEFT", MyCheckbox5, "RIGHT", 5, 0)
+MyCheckbox5.text:SetText("cast shadowburn")
+
+-- variable that controls the state
+MyCheckbox5:SetChecked(castshadowburn)
+
+MyCheckbox5:SetScript("OnClick", function(self)
+	castshadowburn = self:GetChecked()
 end)
 
 local box = CreateFrame("Frame", "CombatRogueCenterBox", UIParent)
@@ -99,6 +116,14 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			local sname = "Shadow Bolt"
 			local shadowisUsable, notEnoughMana = IsUsableSpell(sname)
 			local canCastShadowBolt = shadowisUsable and not notEnoughMana and spell ~= sname
+
+			local shadowburn = "Shadowburn"
+			local usable, noMana = IsUsableSpell(shadowburn)
+			local start, duration, enabled = GetSpellCooldown(shadowburn)
+
+			local canCastShadowBurn = usable and not noMana and enabled == 0 and duration == 0
+
+			print("canCastShadowBurn:", canCastShadowBurn)
 
 			local healthplayer = UnitHealth("player")
 			local maxplayerHealth = UnitHealthMax("player")
