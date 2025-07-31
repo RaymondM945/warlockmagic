@@ -46,7 +46,7 @@ MyCheckbox3:SetPoint("TOP", MyCheckbox2, "BOTTOM", 0, 0) -- Directly under Check
 
 MyCheckbox3.text = MyCheckbox3:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 MyCheckbox3.text:SetPoint("LEFT", MyCheckbox3, "RIGHT", 5, 0)
-MyCheckbox3.text:SetText("cast immolate")
+MyCheckbox3.text:SetText("cast shadowbolt")
 
 MyCheckbox3:SetChecked(castshadowbolt)
 
@@ -153,6 +153,8 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				box.texture:SetColorTexture(1, 0, 1, 1)
 			elseif not AuraUtil.FindAuraByName(curseOfReck, "target", "HARMFUL") and IsUsableSpell(curseOfReck) then
 				box.texture:SetColorTexture(0, 1, 1, 1)
+			elseif canCastShadowBurn and castshadowburn then
+				box.texture:SetColorTexture(1, 1, 0.5, 1)
 			elseif canCastShadowBolt and castshadowbolt then
 				box.texture:SetColorTexture(0.5, 1, 0.5, 1)
 			elseif not IsAutoRepeatSpell("Shoot") then
